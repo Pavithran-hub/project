@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wishlist</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      margin: 0;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin: 15px;
+      padding: 10px 15px;
+      background: #dc3545;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .back-button:hover {
+      background: #b52a38;
+    }
+
+    .wishlist-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .product-box {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .product-box img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .product-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .view-button {
+      background: #28a745;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .view-button:hover {
+      background: #218838;
+    }
+
+    .remove-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: black;
+      cursor: pointer;
+    }
+
+    .remove-icon:hover {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>My Wishlist</h1>
+  <a href="index.html" class="back-button">Back to Products</a>
+
+  <div class="wishlist-container" id="wishlistItems"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const wishlistContainer = document.getElementById("wishlistItems");
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+      const products = [
+        { id: 1, title: "AutoCAD Software", image: "pavi.jpg" },
+        { id: 2, title: "Adobe Photoshop", image: "pavi.jpg" },
+        { id: 3, title: "Microsoft Office", image: "pavi.jpg" },
+        { id: 4, title: "Final Cut Pro", image: "pavi.jpg" },
+        { id: 5, title: "Blender 3D", image: "pavi.jpg" },
+        { id: 6, title: "Autodesk Maya", image: "pavi.jpg" },
+        { id: 7, title: "Premiere Pro", image: "pavi.jpg" },
+        { id: 8, title: "Figma", image: "pavi.jpg" },
+        { id: 9, title: "Sublime Text", image: "pavi.jpg" },
+        { id: 10, title: "VS Code", image: "pavi.jpg" },
+        { id: 11, title: "WordPress", image: "pavi.jpg" },
+        { id: 12, title: "Google Analytics", image: "pavi.jpg" },
+      ];
+
+      const wishlistProducts = products.filter((product) =>
+        wishlist.includes(product.title)
+      );
+
+      if (wishlistProducts.length === 0) {
+        wishlistContainer.innerHTML = "<p>Your wishlist is empty.</p>";
+      } else {
+        wishlistProducts.forEach((product) => {
+          const productBox = document.createElement("div");
+          productBox.classList.add("product-box");
+
+          productBox.innerHTML = `
+            <button class="remove-icon" data-title="${product.title}">
+              <i class="fas fa-trash"></i>
+            </button>
+            <img src="${product.image}" alt="Product Image" class="product-image">
+            <h3 class="product-title">${product.title}</h3>
+            <button class="view-button" onclick="viewProduct('${product.title}', '${product.image}')">View</button>
+          `;
+
+          productBox.querySelector(".remove-icon").addEventListener("click", function () {
+            let updatedWishlist = wishlist.filter((item) => item !== product.title);
+            localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+            location.reload();
+          });
+
+          wishlistContainer.appendChild(productBox);
+        });
+      }
+    });
+
+    function viewProduct(title, imageSrc) {
+      const productData = { title, imageSrc };
+      localStorage.setItem("selectedProduct", JSON.stringify(productData));
+      window.location.href = "auction.html";
+    }
+  </script>
+</body>
+</html>

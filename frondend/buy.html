@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Search bar styling */
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 90%;
+    padding: 10px;
+    margin-left:20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Product container grid layout */
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two products per row */
+    gap: 20px;
+    margin-left:5%;
+}
+
+/* Product box styling */
+.product-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative; /* For positioning the wishlist icon */
+    transition: transform 0.2s;
+}
+
+.product-box:hover {
+    transform: scale(1.05);
+}
+
+/* Product image styling */
+.product-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Product title styling */
+.product-title {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+/* Product button styling */
+.product-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.product-button:hover {
+    background-color: #218838;
+}
+
+/* Wishlist icon positioning and styling */
+.wishlist-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.wishlist-logo {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+.wishlist-logo:hover {
+    opacity: 1;
+}
+
+/* Red color for the wishlist logo when active */
+.wishlist-active {
+    filter: invert(26%) sepia(99%) saturate(7468%) hue-rotate(356deg) brightness(101%) contrast(101%);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .product-container {
+        grid-template-columns: repeat(2, 1fr); /* Two products per row, even on mobile */
+    }
+
+    .product-box {
+        padding: 10px;
+    }
+
+    .search-bar {
+        font-size: 14px;
+    }
+}
+.wishlist-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.back-button, .wishlist-page-button {
+    display: block;
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    width: fit-content;
+}
+
+.back-button:hover, .wishlist-page-button:hover {
+    background-color: #0056b3;
+}
+
+.remove-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remove-button:hover {
+    background-color: #c82333;
+}
+.back-icon {
+    position: absolute;
+    top: 25px; /* Adjust vertical position */
+    left: 10px; /* Adjust horizontal position */
+    color: black; /* Set icon color to black */
+    font-size: 24px; /* Adjust size as needed */
+    cursor: pointer;
+    z-index: 1000;
+}
+</style>
+<body>
+     <!-- Back Icon -->
+<div class="back-icon" onclick="window.history.back()">
+    <i class="fas fa-arrow-left"></i>
+</div>
+    <div class="search-container">
+        
+        <input type="text" placeholder="Search for products..." class="search-bar" id="searchBar">
+    </div>
+
+    <div class="product-container" id="productContainer">
+        <!-- Product Box 1 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist1">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">AutoCAD Software</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 2 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist2">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Adobe Photoshop</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 3 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist3">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Microsoft Office</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 4 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist4">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Final Cut Pro</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 5 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist5">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Blender 3D</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 6 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist6">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Autodesk Maya</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 7 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist7">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Premiere Pro</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 8 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist8">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Figma</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 9 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist9">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Sublime Text</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 10 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist10">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">VS Code</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 11 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist11">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">WordPress</h3>
+            <button class="product-button">View</button>
+        </div>
+
+        <!-- Product Box 12 -->
+        <div class="product-box">
+            <a href="javascript:void(0);" class="wishlist-icon" id="wishlist12">
+                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" alt="Wishlist Icon" class="wishlist-logo">
+            </a>
+            <img src="pavi.jpg" alt="Product Image" class="product-image">
+            <h3 class="product-title">Google Analytics</h3>
+            <button class="product-button">View</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchBar = document.getElementById('searchBar');
+            const productBoxes = document.querySelectorAll('.product-box');
+            const wishlistIcons = document.querySelectorAll('.wishlist-icon');
+            const viewButtons = document.querySelectorAll('.product-button');
+
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+            function updateWishlistState() {
+                productBoxes.forEach(box => {
+                    const productTitle = box.querySelector('.product-title').textContent;
+                    const wishlistIcon = box.querySelector('.wishlist-logo');
+
+                    if (wishlist.includes(productTitle)) {
+                        wishlistIcon.style.filter = 'invert(26%) sepia(99%) saturate(7468%) hue-rotate(356deg) brightness(101%) contrast(101%)';
+                    } else {
+                        wishlistIcon.style.filter = ''; 
+                    }
+                });
+            }
+
+            updateWishlistState();
+
+            wishlistIcons.forEach(icon => {
+                icon.addEventListener('click', function () {
+                    const productTitle = this.closest('.product-box').querySelector('.product-title').textContent;
+
+                    if (wishlist.includes(productTitle)) {
+                        wishlist = wishlist.filter(item => item !== productTitle);
+                    } else {
+                        wishlist.push(productTitle);
+                    }
+
+                    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+                    updateWishlistState();
+                });
+            });
+
+            searchBar.addEventListener('input', function () {
+                const searchTerm = searchBar.value.toLowerCase();
+                productBoxes.forEach(box => {
+                    const title = box.querySelector('.product-title').textContent.toLowerCase();
+                    if (title.includes(searchTerm)) {
+                        box.style.display = 'block';
+                    } else {
+                        box.style.display = 'none';
+                    }
+                });
+            });
+
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const productBox = this.closest('.product-box');
+                    const title = productBox.querySelector('.product-title').textContent;
+                    const imageSrc = productBox.querySelector('.product-image').src;
+
+                    localStorage.setItem('selectedProduct', JSON.stringify({ title, imageSrc }));
+
+                    window.location.href = "auction.html";
+                });
+            });
+        });
+    </script>
+</body>
+</html>

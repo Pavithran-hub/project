@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      overflow: hidden;
+    }
+    .back-icon {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #007bff;
+      z-index: 2;
+    }
+    .product-details {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      text-align: center;
+      max-width: 400px;
+      margin: 60px auto 20px auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .product-image {
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .product-title {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+    .clock {
+      font-size: 24px;
+      text-align: center;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .amount-buttons {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .amount-buttons button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .amount-buttons button:hover {
+      background-color: #218838;
+    }
+    .amount-display {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .floating-message {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .message-text {
+      display: inline-block;
+      position: relative;
+      animation: float 10s linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    #auctionEnded {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      font-size: 60px;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      animation: zoomEffect 2s infinite;
+      z-index: 5;
+    }
+    @keyframes zoomEffect {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.5); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <i class="fas fa-arrow-left back-icon" onclick="window.history.back()"></i>
+  <div class="clock" id="clock"></div>
+
+  <div class="product-details">
+    <img src="" alt="Product Image" class="product-image" id="productImage" />
+    <h2 class="product-title" id="productTitle"></h2>
+  </div>
+
+  <div id="actionMessage" class="amount-display">AUCTION IS STARTED AFTER THE COUNTDOWN</div>
+  <div id="countdownDisplay" class="amount-display"></div>
+
+  <div class="amount-buttons" id="amountButtons">
+    <button id="add50">+50</button>
+    <div class="amount-display" id="totalAmount">0</div>
+    <button id="add100">+100</button>
+  </div>
+
+  <div class="floating-message" id="floatingMessage"></div>
+
+  <div id="auctionEnded">AUCTION IS ENDED</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const productData = JSON.parse(localStorage.getItem("selectedProduct"));
+      if (productData) {
+        document.getElementById("productTitle").textContent = productData.title;
+        document.getElementById("productImage").src = productData.imageSrc;
+      }
+
+      let total = 0;
+      const totalAmount = document.getElementById("totalAmount");
+      const floatingMessage = document.getElementById("floatingMessage");
+      const actionMessage = document.getElementById("actionMessage");
+      const amountButtons = document.getElementById("amountButtons");
+      const clock = document.getElementById("clock");
+      const countdownDisplay = document.getElementById("countdownDisplay");
+      const auctionEndedScreen = document.getElementById("auctionEnded");
+
+      document.getElementById("add50").addEventListener("click", () => {
+        total += 50;
+        totalAmount.textContent = total;
+        showFloatingMessage("+50 added. Total: " + total);
+        restartAuctionCountdown();
+      });
+
+      document.getElementById("add100").addEventListener("click", () => {
+        total += 100;
+        totalAmount.textContent = total;
+        showFloatingMessage("+100 added. Total: " + total);
+        restartAuctionCountdown();
+      });
+
+      function showFloatingMessage(msg) {
+        floatingMessage.innerHTML = `<div class="message-text">${msg}</div>`;
+      }
+
+      function displayClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        clock.textContent = `${hours}:${minutes}:${seconds}`;
+      }
+
+      const startTime = new Date();
+      startTime.setHours(12, 36, 0); // Set auction start time here
+      const endTime = new Date();
+      endTime.setHours(12, 37, 0); // Set auction end time here
+
+      const clockInterval = setInterval(() => {
+        const now = new Date();
+        displayClock();
+
+        if (now >= startTime && now < endTime) {
+          clearInterval(clockInterval);
+          startInitialCountdown();
+        } else if (now >= endTime) {
+          clearInterval(clockInterval);
+          endAuction();
+        }
+      }, 1000);
+
+      function startInitialCountdown() {
+        let countdown = 10;
+        clock.textContent = `00:${countdown}`;
+        const countdownInterval = setInterval(() => {
+          countdown--;
+          clock.textContent = `00:${countdown}`;
+          if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            clock.textContent = "AUCTION STARTED";
+            actionMessage.style.display = "none";
+            amountButtons.style.display = "flex";
+            startAuctionCountdown();
+          }
+        }, 1000);
+      }
+
+      let auctionCountdownInterval;
+
+      function startAuctionCountdown() {
+        let countdown = 5;
+        countdownDisplay.textContent = `Auction ends in: ${countdown}s`;
+
+        auctionCountdownInterval = setInterval(() => {
+          const now = new Date();
+          if (now >= endTime) {
+            clearInterval(auctionCountdownInterval);
+            endAuction();
+          } else {
+            countdown--;
+            countdownDisplay.textContent = `Auction ends in: ${countdown}s`;
+            if (countdown <= 0) {
+              clearInterval(auctionCountdownInterval);
+              document.getElementById("actionMessage").textContent = "AUCTION ENDED";
+              amountButtons.style.display = "none";
+              countdownDisplay.textContent = `Final Price: ${total}`;
+            }
+          }
+        }, 1000);
+      }
+
+      function restartAuctionCountdown() {
+        clearInterval(auctionCountdownInterval);
+        startAuctionCountdown();
+      }
+
+      function endAuction() {
+        document.body.innerHTML = '';
+        auctionEndedScreen.style.display = 'flex';
+        document.body.appendChild(auctionEndedScreen);
+      }
+    });
+  </script>
+</body>
+</html>

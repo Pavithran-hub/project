@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us Anytime</title>
+</head>
+<style>
+/* Reset Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffffff, #dcdcdc);
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* Contact Section */
+.contact-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #2c2c2c, #4a4a4a);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-bottom: 5px solid #555;
+    position: relative;
+}
+
+.contact-header h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.contact-header p {
+    font-size: 18px;
+    margin-bottom: 40px;
+    color: #ddd;
+}
+
+/* Contact Container */
+.contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+/* Contact Cards */
+.contact-card {
+    background: linear-gradient(145deg, #f0f0f0, #cfcfcf);
+    color: #222;
+    padding: 30px 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    width: 320px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 2px solid #bbb;
+}
+
+.contact-card:hover {
+    transform: translateY(-10px);
+}
+
+.contact-card h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.contact-card p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Swipe-to-Call Button */
+.swipe-call-container {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    border-radius: 30px;
+    background: #333;
+    margin: 20px 0;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.swipe-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    border-radius: 50%;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    user-select: none;
+    transition: left 0.2s ease;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+
+.swipe-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ccc;
+    pointer-events: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Message Box */
+.message-box {
+    position: relative;
+    width: 100%;
+    margin-top: 15px;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    font-size: 14px;
+    border: 2px solid #bbb;
+    border-radius: 10px;
+    resize: none;
+    padding-right: 60px;
+}
+
+.send-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.send-btn:hover {
+    background: #222;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .contact-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+<body>
+
+<!-- Contact Section -->
+<section class="contact-section">
+    <div class="contact-header">
+        <h1>Contact Us Anytime</h1>
+        <p>We’re here to assist you. Reach out to us effortlessly.</p>
+    </div>
+
+    <div class="contact-container">
+        <!-- Sales Contact Card -->
+        <div class="contact-card">
+            <h2>Speak with Our Sales Team</h2>
+            <p>Swipe right to connect with our sales experts.</p>
+            <div class="swipe-call-container" id="swipeCall">
+                <div class="swipe-handle" id="swipeHandle">📞</div>
+                <div class="swipe-text">Swipe to Connect</div>
+            </div>
+        </div>
+
+        <!-- Customer Support Card -->
+        <div class="contact-card">
+            <h2>Reach Out to Support</h2>
+            <p>Got questions? Drop us a message.</p>
+            <div class="message-box">
+                <textarea id="messageBox" placeholder="Enter your message here..."></textarea>
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+let handle = document.getElementById('swipeHandle');
+let container = document.getElementById('swipeCall');
+
+let startX = 0;
+let isDragging = false;
+
+handle.addEventListener('mousedown', startDrag);
+handle.addEventListener('touchstart', startDrag);
+
+function startDrag(e) {
+    isDragging = true;
+    startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+
+    document.addEventListener('mousemove', moveDrag);
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchmove', moveDrag);
+    document.addEventListener('touchend', stopDrag);
+}
+
+function moveDrag(e) {
+    if (!isDragging) return;
+    let currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    let offset = currentX - startX;
+    let maxWidth = container.clientWidth - handle.clientWidth;
+
+    if (offset < 0) offset = 0;
+    if (offset > maxWidth) offset = maxWidth;
+
+    handle.style.left = offset + 'px';
+
+    if (offset >= maxWidth) {
+        isDragging = false;
+        window.location.href = 'tel:9994219774';
+    }
+}
+
+function stopDrag() {
+    isDragging = false;
+    handle.style.left = '0px';
+    document.removeEventListener('mousemove', moveDrag);
+    document.removeEventListener('mouseup', stopDrag);
+    document.removeEventListener('touchmove', moveDrag);
+    document.removeEventListener('touchend', stopDrag);
+}
+
+function sendMessage() {
+    let message = document.getElementById('messageBox').value.trim();
+    if (message === "") {
+        alert('Please enter a message before sending.');
+        return;
+    }
+    let encodedMessage = encodeURIComponent(message);
+    window.location.href = sms:9994219774?body=${encodedMessage};
+    document.getElementById('messageBox').value = "";
+}
+</script>
+
+</body>
+</html>
